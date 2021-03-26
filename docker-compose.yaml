@@ -1,0 +1,44 @@
+services:
+
+  emby:
+    user: root
+    image: emby/embyserver:beta
+    restart: unless-stopped
+    volumes:
+     - /project/emby:/config
+     - /mnt/embymedia:/media/ro
+    ports:
+     - 8096:8096
+     - 8920:8920
+     - 7359:7359/udp
+     - 1900:1900/udp
+    environment:
+     - APP_UID=0
+     - APP_GID=0
+  embystat:
+    image: ghcr.io/linuxserver/embystat
+    volumes: 
+     - /project/emby/appdata:/config
+    ports:
+     - 6555:6555
+    restart: unless-stopped
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: always
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+     - /portainer_data:/data portainer/portainer-ce
+    ports:
+     - 9000:9000
+  jenkins:
+    container_name: jenkins
+    user: root
+    image: jenkins/jenkins:lts
+    privileged: true
+    ports:
+     - 8081:8080
+     - 50000:50000
+    volumes:
+     - ./jenkins_home:/var/jenkins_home
+     - /usr/local/bin/docker:/usr/bin/docker
+     - /var/run/docker.sock:/var/run/docker.sock
