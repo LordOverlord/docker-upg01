@@ -74,7 +74,7 @@ services:
     image: rclone/rclone
     container_name: rclone
     restart: always
-    command: rcd --rc-web-gui --rc-addr :5572 --rc-user overlord --rc-pass Athlon.64
+    command: rcd --rc-web-gui --rc-addr :5572 --rc-user overlord --rc-pass Local.64
     ports:
      - 5572:5572
     volumes: 
