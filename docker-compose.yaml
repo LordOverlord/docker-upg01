@@ -42,3 +42,40 @@ services:
      - ./jenkins_home:/var/jenkins_home
      - /usr/local/bin/docker:/usr/bin/docker
      - /var/run/docker.sock:/var/run/docker.sock
+  couchpotato:
+    image: ghcr.io/linuxserver/couchpotato
+    container_name: couchpotato
+    volumes:
+     - /project/emby/couchpotato/appdata:/config
+     - /project/emby/couchpotato/downloads:/downloads
+     - /project/emby/couchpotato/movies:/movies
+    ports:
+     - 5050:5050
+    restart: unless-stopped
+    environment:
+     - PUID=1000
+     - PGID=1000
+     - TZ=Europe/London
+  radarr:
+    image: ghcr.io/linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /project/emby/radarr/config:/config
+      - /project/emby/radarr/movies:/movies
+      - /project/emby/radarr/downloads:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+  rclone_rclone:
+    image: rclone/rclone:latest
+    container_name: rclone
+    command: rdc --rc-web-gui --rc-addr : 5572 --rc-user overlord --rc-pass Athlon.64
+    ports:
+     - "5572:5572"
+    volumes: 
+     - /project/rclone:/config/rclone
+     - /project/rclone:/logs
