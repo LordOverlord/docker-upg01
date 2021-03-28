@@ -71,11 +71,15 @@ services:
       - 7878:7878
     restart: unless-stopped
   rclone_rclone:
-    image: rclone/rclone:latest
+    image: rclone/rclone
     container_name: rclone
-    command: rdc --rc-web-gui --rc-addr : 5572 --rc-user overlord --rc-pass Athlon.64
+    restart: always
+    command: rcd --rc-web-gui --rc-addr :5572 --rc-user overlord --rc-pass Athlon.64
     ports:
-     - "5572:5572"
+     - 5572:5572
     volumes: 
-     - /project/rclone:/config/rclone
-     - /project/rclone:/logs
+     - ~/project/rclone:/config/rclone
+    environment: 
+     - PHP_TZ=Europe/London
+     - PUID=1000
+     - PGID=1000
